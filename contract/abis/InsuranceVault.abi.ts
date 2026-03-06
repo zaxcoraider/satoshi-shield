@@ -28,6 +28,12 @@ export const InsuranceVaultAbi = [
         type: BitcoinAbiTypes.Function,
     },
     {
+        name: 'resetEvent',
+        inputs: [],
+        outputs: [{ name: 'success', type: ABIDataTypes.BOOL }],
+        type: BitcoinAbiTypes.Function,
+    },
+    {
         name: 'claimPayout',
         inputs: [{ name: 'policyId', type: ABIDataTypes.UINT256 }],
         outputs: [{ name: 'payout', type: ABIDataTypes.UINT256 }],

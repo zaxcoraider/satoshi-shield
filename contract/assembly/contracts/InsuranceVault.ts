@@ -262,6 +262,26 @@ export class InsuranceVault extends OP20 {
         return w;
     }
 
+    /**
+     * resetEvent() → success: bool
+     *
+     * Admin-only. Clears the global eventTriggered flag so new policies can be
+     * purchased again (starts a new coverage season).
+     */
+    @method()
+    @returns({ name: 'success', type: ABIDataTypes.BOOL })
+    public resetEvent(_calldata: Calldata): BytesWriter {
+        if (this.adminMap.get(Blockchain.tx.sender).isZero()) {
+            throw new Revert('Admin only');
+        }
+        this.eventTriggeredStore.set(u256.Zero);
+        this.eventTimestampStore.set(u256.Zero);
+
+        const w = new BytesWriter(1);
+        w.writeBoolean(true);
+        return w;
+    }
+
     // ═══════════════════════════════════════════════════════════════════════════
     // CLAIM METHOD
     // ═══════════════════════════════════════════════════════════════════════════

@@ -60,6 +60,12 @@ export const INSURANCE_VAULT_ABI = [
         type: BitcoinAbiTypes.Function,
     },
     {
+        name: 'resetEvent',
+        inputs:  [],
+        outputs: [{ name: 'success', type: ABIDataTypes.BOOL }],
+        type: BitcoinAbiTypes.Function,
+    },
+    {
         name: 'getPolicy',
         inputs:  [{ name: 'policyId', type: ABIDataTypes.UINT256 }],
         outputs: [

@@ -11,7 +11,7 @@ function chainStr(network: Network): string {
 // ─── Contract addresses ───────────────────────────────────────────────────────
 export const CONTRACT_ADDRESSES: Record<string, string> = {
     mainnet: '',                                              // not deployed
-    testnet: 'opt1sqqfmwzxkt56t6f8f3av5mcmf4llu6r384g6wvr49',
+    testnet: 'opt1sqr7x0jwdldyerhz5w7rapxldtz3tqy5w557g5ad3',
     regtest: '',                                              // local dev
 };
 

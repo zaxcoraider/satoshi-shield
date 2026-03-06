@@ -10,13 +10,20 @@ interface Props {
 }
 
 export function AdminPanel({ address, vault }: Props) {
-    const { poolStats, txLoading, error, lastTxId, triggerEvent, clearError } = vault;
+    const { poolStats, txLoading, error, lastTxId, triggerEvent, resetEvent, clearError } = vault;
     const [confirmed, setConfirmed] = useState(false);
+    const [resetConfirmed, setResetConfirmed] = useState(false);
 
     async function handleTrigger() {
         if (!confirmed) { setConfirmed(true); return; }
         setConfirmed(false);
         await triggerEvent();
+    }
+
+    async function handleReset() {
+        if (!resetConfirmed) { setResetConfirmed(true); return; }
+        setResetConfirmed(false);
+        await resetEvent();
     }
 
     const healthColor =
@@ -155,14 +162,46 @@ export function AdminPanel({ address, vault }: Props) {
                     )}
                 </div>
             ) : (
-                <div className="card text-center space-y-3 border-orange-700/40" style={{ background: 'rgba(251,146,60,0.04)' }}>
-                    <div className="text-4xl">⚡</div>
-                    <h3 className="font-bold text-orange-400 text-lg">Insured Event Active</h3>
-                    <p className="text-[#8b949e] text-sm">
-                        The event has been triggered. Policy holders on the Protection Buyer tab can now claim their payouts.
-                    </p>
-                    <div className="rounded-lg bg-orange-900/20 border border-orange-800/40 p-3 text-xs text-orange-300">
-                        Total exposure: <span className="font-bold text-orange-200">{satToBtc(poolStats.totalCoverage)} BTC</span> eligible for payout
+                <div className="card space-y-4 border-orange-700/40" style={{ background: 'rgba(251,146,60,0.04)' }}>
+                    <div className="text-center space-y-3">
+                        <div className="text-4xl">⚡</div>
+                        <h3 className="font-bold text-orange-400 text-lg">Insured Event Active</h3>
+                        <p className="text-[#8b949e] text-sm">
+                            The event has been triggered. Policy holders on the Protection Buyer tab can now claim their payouts.
+                        </p>
+                        <div className="rounded-lg bg-orange-900/20 border border-orange-800/40 p-3 text-xs text-orange-300">
+                            Total exposure: <span className="font-bold text-orange-200">{satToBtc(poolStats.totalCoverage)} BTC</span> eligible for payout
+                        </div>
+                    </div>
+
+                    <div className="border-t border-orange-700/30 pt-4 space-y-3">
+                        <p className="text-[#8b949e] text-xs">
+                            Reset the event flag to close the claim window and allow new protection policies to be purchased (new coverage season).
+                        </p>
+
+                        {resetConfirmed && (
+                            <div className="rounded-lg border border-yellow-800/60 bg-yellow-900/20 p-3 text-sm text-yellow-300 flex items-center gap-2">
+                                <span>⚠</span>
+                                Are you sure? This will close the claim window. Click again to confirm.
+                            </div>
+                        )}
+
+                        <button
+                            onClick={handleReset}
+                            disabled={!address || txLoading}
+                            className="w-full btn-secondary"
+                            style={{ borderColor: '#166534', color: '#4ade80' }}
+                        >
+                            {txLoading
+                                ? 'Sending transaction…'
+                                : resetConfirmed
+                                ? '✓ Confirm — Reset Event & Open New Season'
+                                : '↺ Reset Event (New Coverage Season)'}
+                        </button>
+
+                        {!address && (
+                            <p className="text-[#8b949e] text-sm text-center">Connect admin wallet to reset</p>
+                        )}
                     </div>
                 </div>
             )}

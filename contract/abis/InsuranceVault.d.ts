@@ -50,6 +50,16 @@ export type TriggerEvent = CallResult<
 >;
 
 /**
+ * @description Represents the result of the resetEvent function call.
+ */
+export type ResetEvent = CallResult<
+    {
+        success: boolean;
+    },
+    OPNetEvent<never>[]
+>;
+
+/**
  * @description Represents the result of the claimPayout function call.
  */
 export type ClaimPayout = CallResult<
@@ -140,6 +150,7 @@ export interface IInsuranceVault extends IOP_NETContract {
     withdrawLiquidity(lpTokenAmount: bigint): Promise<WithdrawLiquidity>;
     buyProtection(coverageAmount: bigint): Promise<BuyProtection>;
     triggerEvent(): Promise<TriggerEvent>;
+    resetEvent(): Promise<ResetEvent>;
     claimPayout(policyId: bigint): Promise<ClaimPayout>;
     getPolicy(policyId: bigint): Promise<GetPolicy>;
     getUserPolicy(owner: Address): Promise<GetUserPolicy>;

@@ -127,11 +127,11 @@ export function useInsuranceVault(
                     contract.getEventTimestamp(),
                 ]);
 
-            const liq   = (liqResult?.properties?.liquidity    as bigint)  ?? 0n;
-            const cov   = (covResult?.properties?.coverage     as bigint)  ?? 0n;
-            const count = (countResult?.properties?.count      as bigint)  ?? 0n;
+            const liq   = safeB(liqResult?.properties?.liquidity);
+            const cov   = safeB(covResult?.properties?.coverage);
+            const count = safeB(countResult?.properties?.count);
             const evt   = (eventResult?.properties?.triggered  as boolean) ?? false;
-            const ts    = (tsResult?.properties?.blockNumber   as bigint)  ?? 0n;
+            const ts    = safeB(tsResult?.properties?.blockNumber);
 
             const utilizationPct = liq > 0n ? Number((cov * 100n) / liq) : 0;
 
@@ -176,8 +176,8 @@ export function useInsuranceVault(
                 contract.getUserPolicy(addressObj),
             ]);
 
-            const bal      = (balResult?.properties?.balance    as bigint) ?? 0n;
-            const policyId = (policyIdResult?.properties?.policyId as bigint) ?? 0n;
+            const bal      = safeB(balResult?.properties?.balance);
+            const policyId = safeB(policyIdResult?.properties?.policyId);
 
             setLpBalance(bal);
 
@@ -187,10 +187,10 @@ export function useInsuranceVault(
                     const p = pResult.properties;
                     setUserPolicy({
                         policyId,
-                        coverageAmount: (p.coverageAmount as bigint) ?? 0n,
-                        startBlock:     (p.startBlock     as bigint) ?? 0n,
-                        expiryBlock:    (p.expiryBlock    as bigint) ?? 0n,
-                        status:         (p.status         as bigint) ?? 0n,
+                        coverageAmount: safeB(p.coverageAmount),
+                        startBlock:     safeB(p.startBlock),
+                        expiryBlock:    safeB(p.expiryBlock),
+                        status:         safeB(p.status),
                     });
                 }
             } else {
@@ -210,6 +210,16 @@ export function useInsuranceVault(
         if (address) refreshUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [network, address, addressObj, walletProvider]);
+
+    // ── Safe BigInt converter ─────────────────────────────────────────────────
+    // `as bigint` in TypeScript is compile-time only. The OPNet SDK may return
+    // small u256 values as regular JS numbers. Using strict === with 1n then
+    // fails silently. This helper guarantees a true BigInt at runtime.
+    function safeB(v: unknown): bigint {
+        if (typeof v === 'bigint') return v;
+        if (v == null) return 0n;
+        try { return BigInt(String(v)); } catch { return 0n; }
+    }
 
     // ── Revert message decoder ────────────────────────────────────────────────
     // OPNet encodes revert strings as base64 → raw binary.
@@ -365,6 +375,17 @@ export function useInsuranceVault(
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [getWriteContract, address, network]);
 
+    const resetEvent = useCallback(async (): Promise<boolean> => {
+        const c = await getWriteContract();
+        if (!c) return false;
+        return sendTx(async () => {
+            const sim = await c.resetEvent();
+            assertSim(sim, 'resetEvent');
+            return sim.sendTransaction(txParams());
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [getWriteContract, address, network]);
+
     return {
         poolStats,
         lpBalance,
@@ -381,6 +402,7 @@ export function useInsuranceVault(
         buyProtection,
         claimPayout,
         triggerEvent,
+        resetEvent,
         clearError: () => setError(null),
     };
 }

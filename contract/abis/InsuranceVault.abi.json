@@ -68,6 +68,19 @@
             ]
         },
         {
+            "name": "resetEvent",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "success",
+                    "type": "BOOL"
+                }
+            ]
+        },
+        {
             "name": "claimPayout",
             "type": "Function",
             "payable": false,
