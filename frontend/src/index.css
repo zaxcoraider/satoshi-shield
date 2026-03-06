@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --bitcoin: #F7931A;
+    --bitcoin-dark: #d4780e;
+    --glow-bitcoin: 0 0 20px rgba(247, 147, 26, 0.35);
+    --glow-green:   0 0 20px rgba(74, 222, 128, 0.25);
+    --glow-red:     0 0 20px rgba(248, 113, 113, 0.25);
+}
+
+body {
+    background-color: #0a0e17;
+    background-image:
+        radial-gradient(ellipse at 20% 0%, rgba(247,147,26,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 100%, rgba(59,130,246,0.04) 0%, transparent 60%);
+    color: #c9d1d9;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    min-height: 100vh;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0d1117; }
+::-webkit-scrollbar-thumb { background: #30363d; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #F7931A; }
+
+/* ─── Keyframes ─────────────────────────────────────────────────────────────── */
+@keyframes shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position:  200% center; }
+}
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 10px rgba(247,147,26,0.2); }
+    50%       { box-shadow: 0 0 25px rgba(247,147,26,0.5); }
+}
+@keyframes fill-bar {
+    from { width: 0%; }
+    to   { width: var(--target-width); }
+}
+@keyframes count-up {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+@keyframes dash {
+    from { stroke-dashoffset: 377; }
+    to   { stroke-dashoffset: var(--target-offset); }
+}
+
+@layer components {
+    /* ── Cards ────────────────────────────────────────────────────────────────── */
+    .card {
+        @apply bg-[#161b22] border border-[#30363d] rounded-xl p-6;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+        border-color: rgba(247,147,26,0.25);
+    }
+    .card-glow {
+        @apply card;
+        box-shadow: 0 0 0 1px rgba(247,147,26,0.1), 0 4px 24px rgba(0,0,0,0.4);
+    }
+    .card-glow:hover {
+        box-shadow: var(--glow-bitcoin), 0 4px 24px rgba(0,0,0,0.5);
+    }
+    .stat-box {
+        @apply bg-[#0d1117] rounded-xl p-4 border border-[#30363d];
+        transition: border-color 0.2s, transform 0.15s;
+    }
+    .stat-box:hover {
+        border-color: rgba(247,147,26,0.3);
+        transform: translateY(-1px);
+    }
+    .stat-box-lg {
+        @apply stat-box p-5;
+    }
+
+    /* ── Typography ───────────────────────────────────────────────────────────── */
+    .label {
+        @apply text-[#8b949e] text-xs uppercase tracking-wider mb-1.5 block;
+    }
+    .metric-value {
+        @apply text-2xl font-bold text-[#c9d1d9] tabular-nums;
+        animation: count-up 0.4s ease-out both;
+    }
+    .metric-value-lg {
+        @apply text-3xl font-bold tabular-nums;
+        animation: count-up 0.4s ease-out both;
+    }
+    .glow-bitcoin {
+        color: #F7931A;
+        text-shadow: 0 0 20px rgba(247,147,26,0.6);
+    }
+    .glow-green {
+        color: #4ade80;
+        text-shadow: 0 0 15px rgba(74,222,128,0.5);
+    }
+    .glow-red {
+        color: #f87171;
+        text-shadow: 0 0 15px rgba(248,113,113,0.4);
+    }
+    .gradient-text {
+        background: linear-gradient(135deg, #F7931A 0%, #fbbf24 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* ── Buttons ──────────────────────────────────────────────────────────────── */
+    .btn-primary {
+        @apply font-semibold px-5 py-2.5 rounded-lg transition-all duration-200
+               disabled:opacity-40 disabled:cursor-not-allowed;
+        background: linear-gradient(135deg, #F7931A 0%, #e8820a 100%);
+        color: #000;
+        box-shadow: 0 2px 12px rgba(247,147,26,0.3);
+    }
+    .btn-primary:not(:disabled):hover {
+        background: linear-gradient(135deg, #ffab3d 0%, #F7931A 100%);
+        box-shadow: 0 4px 20px rgba(247,147,26,0.5);
+        transform: translateY(-1px);
+    }
+    .btn-primary:not(:disabled):active {
+        transform: translateY(0);
+    }
+    .btn-secondary {
+        @apply bg-transparent border border-[#30363d] hover:border-[#F7931A]
+               text-[#c9d1d9] font-medium px-5 py-2.5 rounded-lg
+               transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed;
+    }
+    .btn-secondary:not(:disabled):hover {
+        color: #F7931A;
+        box-shadow: 0 0 12px rgba(247,147,26,0.15);
+    }
+    .btn-danger {
+        @apply bg-red-600 hover:bg-red-500 text-white font-semibold
+               px-5 py-2.5 rounded-lg transition-all duration-200
+               disabled:opacity-40 disabled:cursor-not-allowed;
+        box-shadow: 0 2px 12px rgba(239,68,68,0.3);
+    }
+
+    /* ── Form inputs ──────────────────────────────────────────────────────────── */
+    .input-field {
+        @apply w-full bg-[#0d1117] border border-[#30363d] rounded-lg
+               px-4 py-3 text-[#c9d1d9] placeholder-[#8b949e]
+               focus:outline-none transition-all duration-200;
+    }
+    .input-field:focus {
+        border-color: #F7931A;
+        box-shadow: 0 0 0 3px rgba(247,147,26,0.12);
+    }
+
+    /* ── Badges ───────────────────────────────────────────────────────────────── */
+    .badge-active {
+        @apply inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full font-medium;
+        background: rgba(74,222,128,0.1);
+        color: #4ade80;
+        border: 1px solid rgba(74,222,128,0.3);
+    }
+    .badge-claimed {
+        @apply inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full font-medium;
+        background: rgba(96,165,250,0.1);
+        color: #60a5fa;
+        border: 1px solid rgba(96,165,250,0.3);
+    }
+    .badge-expired {
+        @apply inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full font-medium;
+        background: rgba(107,114,128,0.1);
+        color: #9ca3af;
+        border: 1px solid rgba(107,114,128,0.3);
+    }
+
+    /* ── Tabs ─────────────────────────────────────────────────────────────────── */
+    .tab-active {
+        @apply border-b-2 border-[#F7931A] text-[#F7931A] pb-3 font-semibold;
+        text-shadow: 0 0 12px rgba(247,147,26,0.4);
+    }
+    .tab-inactive {
+        @apply border-b-2 border-transparent text-[#8b949e] pb-3
+               hover:text-[#c9d1d9] transition-colors cursor-pointer;
+    }
+
+    /* ── Progress bars ────────────────────────────────────────────────────────── */
+    .progress-track {
+        @apply w-full h-2 rounded-full overflow-hidden;
+        background: rgba(255,255,255,0.06);
+    }
+    .progress-fill {
+        @apply h-full rounded-full transition-all duration-700;
+    }
+    .progress-fill-green  { background: linear-gradient(90deg, #22c55e, #4ade80); }
+    .progress-fill-yellow { background: linear-gradient(90deg, #eab308, #fbbf24); }
+    .progress-fill-red    { background: linear-gradient(90deg, #ef4444, #f87171); box-shadow: 0 0 8px rgba(239,68,68,0.4); }
+    .progress-fill-bitcoin {
+        background: linear-gradient(90deg, #F7931A, #fbbf24);
+        box-shadow: 0 0 10px rgba(247,147,26,0.4);
+    }
+    .progress-animated {
+        animation: fill-bar 1.2s cubic-bezier(0.4,0,0.2,1) both;
+    }
+
+    /* ── Divider ──────────────────────────────────────────────────────────────── */
+    .divider {
+        @apply h-px my-4;
+        background: linear-gradient(90deg, transparent, #30363d, transparent);
+    }
+
+    /* ── Health indicator ─────────────────────────────────────────────────────── */
+    .health-dot-green  { @apply w-2.5 h-2.5 rounded-full bg-green-400; box-shadow: 0 0 8px rgba(74,222,128,0.7); }
+    .health-dot-yellow { @apply w-2.5 h-2.5 rounded-full bg-yellow-400; box-shadow: 0 0 8px rgba(250,204,21,0.7); }
+    .health-dot-red    { @apply w-2.5 h-2.5 rounded-full bg-red-400 animate-pulse; box-shadow: 0 0 8px rgba(248,113,113,0.7); }
+}

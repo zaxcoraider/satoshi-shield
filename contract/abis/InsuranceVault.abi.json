@@ -1,0 +1,203 @@
+{
+    "functions": [
+        {
+            "name": "depositLiquidity",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "amount",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "lpTokensMinted",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "withdrawLiquidity",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "lpTokenAmount",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "btcReturned",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "buyProtection",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "coverageAmount",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "policyId",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "triggerEvent",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "success",
+                    "type": "BOOL"
+                }
+            ]
+        },
+        {
+            "name": "claimPayout",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "policyId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "payout",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "getPolicy",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "policyId",
+                    "type": "UINT256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "coverageAmount",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "startBlock",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "expiryBlock",
+                    "type": "UINT256"
+                },
+                {
+                    "name": "status",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "getUserPolicy",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [
+                {
+                    "name": "owner",
+                    "type": "ADDRESS"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "policyId",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "getTotalLiquidity",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "liquidity",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "getTotalActiveCoverage",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "coverage",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "getPolicyCount",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "count",
+                    "type": "UINT256"
+                }
+            ]
+        },
+        {
+            "name": "isEventTriggered",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "triggered",
+                    "type": "BOOL"
+                }
+            ]
+        },
+        {
+            "name": "getEventTimestamp",
+            "type": "Function",
+            "payable": false,
+            "onlyOwner": false,
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "blockNumber",
+                    "type": "UINT256"
+                }
+            ]
+        }
+    ],
+    "events": []
+}
